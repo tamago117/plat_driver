@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <math.h>
 #include <String>
 #include <ros.h>
 #include <std_msgs/Float64.h>
@@ -15,6 +16,7 @@
 const int motor0 = 0;
 const int motor1 = 1;
 const double wheel_tread = 0.575;
+const double wheel_radius = 0.1;
 // Set the number of LEDs to control.
 const uint16_t ledCount = 60;
 // Set the brightness to use (the maximum is 31).
@@ -114,12 +116,16 @@ void loop()
         led.lit(LEDtape::Color::RED, 50);
     }
 
-    diffDrive diff_drive(wheel_tread);
+    diffDrive diff_drive(wheel_tread, wheel_radius);
     diff_drive.steering(cmd_vel.linear.x, cmd_vel.angular.z);
 
+    //[m/s] -> [turn/s]
+    double v_right = diff_drive.rightVelocity()/(2*M_PI*wheel_radius);
+    double v_left = -diff_drive.leftVelocity()/(2*M_PI*wheel_radius);
+
     
-    //odrive.SetVelocity(motor0, diff_drive.rightVelocity());
-    //odrive.SetVelocity(motor1, -diff_drive.leftVelocity());
+    odrive.SetVelocity(motor0, v_right);
+    odrive.SetVelocity(motor1, v_left);
 
     imu_pub.publish(&imu_msg);
     
