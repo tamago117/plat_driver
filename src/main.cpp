@@ -89,7 +89,7 @@ void setup()
     nh.subscribe(mode_sub);
     nh.advertise(imu_pub);
 
-    //odrive_calibration();
+    odrive_calibration();
 
     //variable initialize
     mode = "stop";
