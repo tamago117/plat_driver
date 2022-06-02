@@ -25,7 +25,7 @@ private:
     double vL;
 };
 
-diffDrive::diffDrive(double wheel_tred_, double wheel_radius_) : wheel_tred(wheel_tred), wheel_radius(wheel_radius_)
+diffDrive::diffDrive(double wheel_tred_, double wheel_radius_) : wheel_tred(wheel_tred_), wheel_radius(wheel_radius_)
 {
     
 }

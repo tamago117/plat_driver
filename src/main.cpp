@@ -124,8 +124,8 @@ void loop()
     double v_left = -diff_drive.leftVelocity()/(2*M_PI*wheel_radius);
 
     
-    odrive.SetVelocity(motor0, v_right);
-    odrive.SetVelocity(motor1, v_left);
+    odrive.SetVelocity(motor0, v_left);
+    odrive.SetVelocity(motor1, v_right);
 
     imu_pub.publish(&imu_msg);
     
