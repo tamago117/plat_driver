@@ -1,6 +1,6 @@
 #pragma once
 
-#include <arduino.h>
+#include <Arduino.h>
 #include <math.h>
 #include <stdint.h>
 #include "robot_2d.hpp"
@@ -32,8 +32,8 @@ diffDrive::diffDrive(double wheel_tred_, double wheel_radius_) : wheel_tred(whee
 
 void diffDrive::steering(double v, double w)
 {
-	vR = v + wheel_tred * w;
-    vL = v - wheel_tred * w;
+	vR = v + wheel_tred/2 * w;
+    vL = v - wheel_tred/2 * w;
 }
 
 // r_rotate, l_rotate[rad]

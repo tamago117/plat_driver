@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <math.h>
-#include <String>
+//#include <String.h>
 #include <ros.h>
 #include <std_msgs/Float64.h>
 #include <std_msgs/String.h>
@@ -15,6 +15,7 @@
 //hardware parameter
 const int motor0 = 0;
 const int motor1 = 1;
+const unsigned long calibration_interval = 2000;
 const double wheel_tread = 0.575;
 const double wheel_radius = 0.1;
 // Set the number of LEDs to control.
@@ -35,6 +36,9 @@ const uint8_t dataPin = 8;
 const uint8_t clockPin = 7;
 
 HardwareSerial& odrive_serial = Serial1;
+
+//variable
+unsigned long pre_time;
 
 
 geometry_msgs::Twist cmd_vel;
@@ -95,6 +99,7 @@ void setup()
 
     //variable initialize
     mode = "stop";
+    pre_time = millis();
 }
 
 void loop()
@@ -123,7 +128,10 @@ void loop()
     double v_right = diff_drive.rightVelocity()/(2*M_PI*wheel_radius);
     double v_left = -diff_drive.leftVelocity()/(2*M_PI*wheel_radius);
 
-    
+    if(millis() - pre_time > calibration_interval){
+        pre_time = millis();
+        odrive_calibration();
+    }
     odrive.SetVelocity(motor0, v_left);
     odrive.SetVelocity(motor1, v_right);
 
