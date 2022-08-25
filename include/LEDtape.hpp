@@ -1,5 +1,6 @@
 #pragma once
 #include <Arduino.h>
+#include <cstdlib> //abs()のために
 #include "APA102.h"
 
 class LEDtape
@@ -9,6 +10,10 @@ class LEDtape
             RED,
             GREEN,
             BLUE,
+            RAINBOW,
+            RIGHTEYE,
+            LEFTEYE,
+            CENTEREYE,
         };
 
         //コンストラクター
@@ -40,6 +45,10 @@ LEDtape::lit(LEDtape::Color color, double rate_time)
 {
     //color
     rgb_color leds_color[LED_NUMBER];
+    uint16_t LED_CENTER = LED_NUMBER / 2;
+    uint8_t EYE_SIZE = 10;
+    uint8_t EYE_MOVEMENT = 10;
+
     if(color == Color::RED){
         //red
         for(int i = 0; i < LED_NUMBER; ++i){
@@ -50,12 +59,46 @@ LEDtape::lit(LEDtape::Color color, double rate_time)
         for(int i = 0; i < LED_NUMBER; ++i){
             leds_color[i] = rgb_color(0, 255, 0);
         }
-    }else{
+    }else if(color == Color::BLUE){
         //blue
         for(int i = 0; i < LED_NUMBER; ++i){
             leds_color[i] = rgb_color(0, 0, 255);
         }
+    }else if(color == Color::RAINBOW){
+        //rainbow
+        for(int i = 0; i < LED_NUMBER; ++i){
+            uint8_t p = (pre_time >> 4) - i * 8;
+            leds_color[i] = rgb_color(p/255,255,255);
+        }
+    }else if(color == Color::RIGHTEYE){
+        //right eye
+        for(int i = 0; i < LED_NUMBER; ++i){
+            if(EYE_SIZE == abs(i - LED_CENTER + EYE_MOVEMENT)){
+                leds_color[i] = rgb_color(255, 0, 0); //一旦RED
+            }else{
+                leds_color[i] = rgb_color(0,0,0); //目以外は0,0,0
+            }
+        }
+    }else if(color == Color::LEFTEYE){
+        //left eye
+        for(int i = 0; i < LED_NUMBER; ++i){
+            if(EYE_SIZE == abs(i - LED_CENTER - EYE_MOVEMENT)){
+                leds_color[i] = rgb_color(255, 0, 0); //一旦RED
+            }else{
+                leds_color[i] = rgb_color(0,0,0); //目以外は0,0,0
+            }
+        }
+    }else{
+        //center eye
+        for(int i = 0; i < LED_NUMBER; ++i){
+            if(EYE_SIZE == abs(i - LED_CENTER)){
+                leds_color[i] = rgb_color(255, 0, 0); //一旦RED
+            }else{
+                leds_color[i] = rgb_color(0,0,0); //目以外は0,0,0
+            }
+        }        
     }
+    
 
     //brightness
     uint8_t brightness = BRIGHTNESS;
