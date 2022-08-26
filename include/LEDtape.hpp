@@ -67,7 +67,7 @@ LEDtape::lit(LEDtape::Color color, double rate_time)
     }else if(color == Color::RAINBOW){
         //rainbow
         for(int i = 0; i < LED_NUMBER; ++i){
-            uint8_t p = (pre_time >> 4) - i * 8;
+            uint8_t p = (pretime >> 4) - i * 8;
             leds_color[i] = rgb_color(p/255,255,255);
         }
     }else if(color == Color::RIGHTEYE){
