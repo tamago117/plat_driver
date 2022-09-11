@@ -6,15 +6,15 @@ class LEDtape
 {
     public:
         enum class Color{
-            RED,
             GREEN,
             BLUE,
+            RED,
         };
 
         //コンストラクター
         LEDtape(const uint8_t datapin, const uint8_t clockpin, const uint16_t led_number, const uint8_t brightness);
         //シンプルに点滅を繰り返す
-        lit(Color color, double rate_time);
+        void lit(Color color, double rate_time);
     private:
         uint8_t DATA_PIN;
         uint8_t CLOCK_PIN;
@@ -36,25 +36,31 @@ LEDtape::LEDtape(const uint8_t datapin, const uint8_t clockpin, const uint16_t l
     pretime = millis();
 }
 
-LEDtape::lit(LEDtape::Color color, double rate_time)
+void LEDtape::lit(LEDtape::Color color, double rate_time)
 {
     //color
     rgb_color leds_color[LED_NUMBER];
-    if(color == Color::RED){
-        //red
-        for(int i = 0; i < LED_NUMBER; ++i){
-            leds_color[i] = rgb_color(255, 0, 0);
-        }
-    }else if(color == Color::GREEN){
-        //green
-        for(int i = 0; i < LED_NUMBER; ++i){
-            leds_color[i] = rgb_color(0, 255, 0);
-        }
-    }else{
-        //blue
-        for(int i = 0; i < LED_NUMBER; ++i){
-            leds_color[i] = rgb_color(0, 0, 255);
-        }
+    switch (color){
+        case Color::RED:
+            //red
+            for(int i = 0; i < LED_NUMBER; ++i){
+                leds_color[i] = rgb_color(250, 0, 0);
+            }
+            break;
+        case Color::GREEN:
+            //green
+            for(int i = 0; i < LED_NUMBER; ++i){
+                leds_color[i] = rgb_color(0, 250, 0);
+            }
+            break;
+        case Color::BLUE:
+            //blue
+            for(int i = 0; i < LED_NUMBER; ++i){
+                leds_color[i] = rgb_color(0, 0, 250);
+            }
+            break;
+        default:
+            break;
     }
 
     //brightness

@@ -15,13 +15,13 @@
 //hardware parameter
 const int motor0 = 0;
 const int motor1 = 1;
-const unsigned long calibration_interval = 2000;
-const double wheel_tread = 0.575;
+const unsigned long calibration_interval = 4000;
+const double wheel_tread = 0.54;
 const double wheel_radius = 0.1;
 // Set the number of LEDs to control.
 const uint16_t ledCount = 60;
 // Set the brightness to use (the maximum is 31).
-const uint8_t brightness = 20;
+const uint8_t brightness = 15;
 
 
 //pin number
@@ -31,7 +31,8 @@ const uint8_t brightness = 20;
 ////////////////////////////////
 // pin 17: RX - connect to ODrive TX GPIO 1
 // pin 16: TX - connect to ODrive RX GPIO 2
-const uint8_t stop_button_pin = 11;
+const uint8_t stop_button_pin1 = 11;
+const uint8_t stop_button_pin2 = 24;
 const uint8_t dataPin = 8;
 const uint8_t clockPin = 7;
 
@@ -39,6 +40,7 @@ HardwareSerial& odrive_serial = Serial1;
 
 //variable
 unsigned long pre_time;
+String mode;
 
 
 geometry_msgs::Twist cmd_vel;
@@ -47,10 +49,10 @@ void vel_callback(const geometry_msgs::Twist& vel_message)
     cmd_vel = vel_message;
 }
 
-String mode;
+String mode_in;
 void mode_callback(const std_msgs::String& mode_message)
 {
-    mode = mode_message.data;
+    mode_in = mode_message.data;
 }
 
 //ros
@@ -87,7 +89,8 @@ void setup()
     //while (!Serial) ; // wait for Arduino Serial Monitor to open
 
     //pin mode
-    pinMode(stop_button_pin, INPUT_PULLUP);
+    pinMode(stop_button_pin1, INPUT_PULLUP);
+    pinMode(stop_button_pin2, INPUT_PULLUP);
 
     //ros
     nh.initNode();
@@ -104,8 +107,9 @@ void setup()
 
 void loop()
 {
+    mode = mode_in;
     //emergency stop
-    if(digitalRead(stop_button_pin) == 1){
+    if(digitalRead(stop_button_pin2) || digitalRead(stop_button_pin1)){
         mode = "safety_stop";
     }
     //mode
@@ -118,7 +122,7 @@ void loop()
     }else if(mode == "safety_stop"){
         cmd_vel.linear.x = 0.0f;
         cmd_vel.angular.z = 0.0f;
-        led.lit(LEDtape::Color::RED, 50);
+        led.lit(LEDtape::Color::RED, 60);
     }
 
     diffDrive diff_drive(wheel_tread, wheel_radius);
@@ -135,8 +139,8 @@ void loop()
     odrive.SetVelocity(motor0, v_left);
     odrive.SetVelocity(motor1, v_right);
 
-    imu_pub.publish(&imu_msg);
-    
+    //imu_pub.publish(&imu_msg);
+
     nh.spinOnce();
     delay(1);
 }
