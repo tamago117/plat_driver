@@ -168,13 +168,13 @@ void loop()
     imu_pub.publish(&imu_msg);
 
     //odom
-    double left_turn = odrive.GetPosition(motor0)*2*M_PI;
+    /*double left_turn = odrive.GetPosition(motor0)*2*M_PI;
     double right_turn = odrive.GetPosition(motor1)*2*M_PI;
     odom = diff_drive.odometry_gyro(right_turn - pre_right_turn, left_turn - pre_left_turn, gyro.rad(), odom);
     pre_left_turn = left_turn;
     pre_right_turn = right_turn;
     odom_msg.header.frame_id = "odom";
-    odom_msg.header.stamp = nh.now();
+    //odom_msg.header.stamp = nh.now();
     odom_msg.child_frame_id = "base_link";
     odom_msg.pose.pose.position.x = odom.x;
     odom_msg.pose.pose.position.y = odom.y;
@@ -183,7 +183,7 @@ void loop()
     odom_msg.pose.pose.orientation.y = gyro.quat.y();
     odom_msg.pose.pose.orientation.z = gyro.quat.z();
     odom_msg.pose.pose.orientation.w = gyro.quat.w();
-    odom_pub.publish(&odom_msg);
+    odom_pub.publish(&odom_msg);*/
 
     nh.spinOnce();
     delay(1);
