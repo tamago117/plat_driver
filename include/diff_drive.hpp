@@ -39,11 +39,11 @@ void diffDrive::steering(double v, double w)
 // r_rotate, l_rotate[rad]
 robot_2d diffDrive::odometry(double r_rotate, double l_rotate, robot_2d odom)
 {
-    r_rotate = -r_rotate;
+    l_rotate = -l_rotate;
 
     // wheel rotate[rad] -> wheel move[m]
-    double r_move = (r_rotate/(2*M_PI))*wheel_radius;
-    double l_move = (l_rotate/(2*M_PI))*wheel_radius;
+    double r_move = r_rotate*wheel_radius;
+    double l_move = l_rotate*wheel_radius;
 
     odom.x += (r_move + l_move)/2 * cos(odom.yaw);
     odom.y += (r_move + l_move)/2 * sin(odom.yaw);
@@ -55,11 +55,11 @@ robot_2d diffDrive::odometry(double r_rotate, double l_rotate, robot_2d odom)
 // r_rotate, l_rotate[rad], yaw[rad]
 robot_2d diffDrive::odometry_gyro(double r_rotate, double l_rotate, double yaw, robot_2d odom)
 {
-    r_rotate = -r_rotate;
+    l_rotate = -l_rotate;
 
     // wheel rotate[rad] -> wheel move[m]
-    double r_move = (r_rotate/(2*M_PI))*wheel_radius;
-    double l_move = (l_rotate/(2*M_PI))*wheel_radius;
+    double r_move = (r_rotate)*wheel_radius;
+    double l_move = (l_rotate)*wheel_radius;
 
     odom.x += (r_move + l_move)/2 * cos(yaw);
     odom.y += (r_move + l_move)/2 * sin(yaw);
