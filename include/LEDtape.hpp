@@ -7,9 +7,9 @@ class LEDtape
 {
     public:
         enum class Color{
-            RED,
             GREEN,
             BLUE,
+            RED,
         };
         enum class Eye{
             RIGHTEYE,
@@ -29,6 +29,7 @@ class LEDtape
         stulationsin(uint16_t h, double rate);
         //ガンダム
         gundam();
+
 
     private:
         uint8_t DATA_PIN;
@@ -51,26 +52,32 @@ LEDtape::LEDtape(const uint8_t datapin, const uint8_t clockpin, const uint16_t l
     pretime = millis();
 }
 
-LEDtape::lit(LEDtape::Color color, double rate_time)
+void LEDtape::lit(LEDtape::Color color, double rate_time)
 {
     //color
     rgb_color leds_color[LED_NUMBER];
 
-    if(color == Color::RED){
-        //red
-        for(int i = 0; i < LED_NUMBER; ++i){
-            leds_color[i] = rgb_color(255, 0, 0);
-        }
-    }else if(color == Color::GREEN){
-        //green
-        for(int i = 0; i < LED_NUMBER; ++i){
-            leds_color[i] = rgb_color(0, 255, 0);
-        }
-    }else if(color == Color::BLUE){
-        //blue
-        for(int i = 0; i < LED_NUMBER; ++i){
-            leds_color[i] = rgb_color(0, 0, 255);
-        }
+    switch (color){
+        case Color::RED:
+            //red
+            for(int i = 0; i < LED_NUMBER; ++i){
+                leds_color[i] = rgb_color(250, 0, 0);
+            }
+            break;
+        case Color::GREEN:
+            //green
+            for(int i = 0; i < LED_NUMBER; ++i){
+                leds_color[i] = rgb_color(0, 250, 0);
+            }
+            break;
+        case Color::BLUE:
+            //blue
+            for(int i = 0; i < LED_NUMBER; ++i){
+                leds_color[i] = rgb_color(0, 0, 250);
+            }
+            break;
+        default:
+            break;
     }
 
     //brightness
